@@ -18,5 +18,11 @@ Showing folium(based on leaflet.js) map with PyQt desktop app
 
 This is very basic one. Zoom in and out and you can see the country's name and region or anything like that
 
+## Note
+
+main.html will be generated for showing the folium map. main.html contains folium related scripts.
+
+You can just remove it if you want. If you run main.py script it will be generated again anyways
+
 ## See Also
 <a href="https://github.com/yjg30737/pyqt-googlemap-example">PyQt Google map</a>
