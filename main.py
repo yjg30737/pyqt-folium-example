@@ -22,6 +22,7 @@ class ClickableTooltip(QLabel):
         super().__init__(flags=Qt.ToolTip)
         margin = self.style().pixelMetric(
             QStyle.PM_ToolTipLabelFrameWidth, None, self)
+        # YJG - add margin
         self.setMargin(margin + 10)
         self.setForegroundRole(QPalette.ToolTipText)
         self.setWordWrap(True)
@@ -196,7 +197,7 @@ class ClickableTooltip(QLabel):
 
         # adjust the tooltip position if necessary (based on arbitrary margins)
         if not toolTip.isVisible() or parent != toolTip.refWidget or (
-            not parent and toolTip.refPos and 
+            not parent and toolTip.refPos and
             (toolTip.refPos - pos).manhattanLength() > 10):
                 toolTip.move(pos)
 
@@ -210,7 +211,7 @@ class ClickableTooltip(QLabel):
             toolTip.hideTimer.start(delay)
 
         return toolTip
-    
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -282,9 +283,9 @@ class MainWindow(QMainWindow):
                 self.showNormal()
         return super().keyPressEvent(e)
 
-    # TODO show tooltip & hyperlink to explain the detail of each tile
     # TODO maintain the coordinate after switching
     # TODO script keep adding, it makes the file bigger and bigger, so how about replacing instead of adding?
+
     # Create a function to switch the folium tiles when the radio buttons are clicked
     def switch_tiles(self, text):
         if text == 'Stamen Toner':
@@ -299,7 +300,6 @@ class MainWindow(QMainWindow):
             folium.TileLayer('Stamen Terrain').add_to(self.__m)
             self.__m.save('map.html')
             self.__view.reload()
-
     def eventFilter(self, source, event):
         if event.type() == QEvent.ToolTip and source.toolTip():
             toolTip = ClickableTooltip.showText(
@@ -310,6 +310,7 @@ class MainWindow(QMainWindow):
 
     def toolTipLinkClicked(self, url):
         webbrowser.open(url)
+
 
 if __name__ == "__main__":
     import sys
