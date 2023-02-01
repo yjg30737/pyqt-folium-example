@@ -22,7 +22,7 @@ class ClickableTooltip(QLabel):
         super().__init__(flags=Qt.ToolTip)
         margin = self.style().pixelMetric(
             QStyle.PM_ToolTipLabelFrameWidth, None, self)
-        self.setMargin(margin + 1)
+        self.setMargin(margin + 10)
         self.setForegroundRole(QPalette.ToolTipText)
         self.setWordWrap(True)
 
