@@ -14,9 +14,11 @@ Showing folium(based on leaflet.js) map with PyQt desktop app
 
 ## Preview
 
-![image](https://user-images.githubusercontent.com/55078043/211722806-ba4c2d1a-5e5b-4f0b-87ba-531a7d3252c7.png)
+![image](https://user-images.githubusercontent.com/55078043/215922355-15b6d6ed-8a38-4908-8812-fae528cb2810.png)
 
 This is very basic one. Zoom in and out and you can see the country's name and region or anything like that
+
+You can switch between each tile by clicking on each radio button.
 
 ## Note
 
