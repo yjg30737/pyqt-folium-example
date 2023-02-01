@@ -1,9 +1,10 @@
 import os, posixpath
 import folium
 
-from PyQt5.QtCore import QUrl
-from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QApplication, QMainWindow, QRadioButton, QWidget, QHBoxLayout, QVBoxLayout
+from PyQt5.QtCore import QUrl, Qt
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
+from PyQt5.QtWidgets import QApplication, QMainWindow, QRadioButton, QWidget, QHBoxLayout, QVBoxLayout, QMenu, QMenuBar, \
+    QAction, QSizePolicy
 
 
 class MainWindow(QMainWindow):
@@ -42,6 +43,7 @@ class MainWindow(QMainWindow):
 
         navWidget = QWidget()
         navWidget.setLayout(lay)
+        navWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
 
         lay = QVBoxLayout()
         lay.addWidget(navWidget)
@@ -52,6 +54,22 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(mainWidget)
 
+        # submenu of menu bar doesn't show up after full screen - this is bug of PyQt5
+        # self.__view.settings().setAttribute(QWebEngineSettings.FullScreenSupportEnabled, True)
+        # self.__view.page().fullScreenRequested.connect(lambda request: request.accept())
+        # doesn't work either
+
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key_F11:
+            self.showFullScreen()
+        elif e.key() == Qt.Key_Escape:
+            if self.isFullScreen():
+                self.showNormal()
+        return super().keyPressEvent(e)
+
+    # TODO show tooltip & hyperlink to explain the detail of each tile
+    # TODO maintain the coordinate after switching
+    # TODO script keep adding, it makes the file bigger and bigger, so how about replacing instead of adding?
     # Create a function to switch the folium tiles when the radio buttons are clicked
     def switch_tiles(self, text):
         if text == 'Stamen Toner':
