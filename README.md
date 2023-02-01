@@ -20,6 +20,8 @@ This is very basic one. Zoom in and out and you can see the country's name and r
 
 You can switch between each tile by clicking on each radio button.
 
+Each time you click one of them, the Folium HTML file is saved and the QWebEngineView is reloaded.
+
 ## Note
 
 main.html will be generated for showing the folium map. main.html contains folium related scripts.
