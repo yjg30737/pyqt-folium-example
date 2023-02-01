@@ -25,13 +25,21 @@ class MainWindow(QMainWindow):
         self.__view.load(QUrl.fromLocalFile(map_filename))
 
         # Create the radio buttons for each tile provider
+        # tooltip description from https://deparkes.co.uk/2016/06/10/folium-map-tiles/
         stamen_toner = QRadioButton('Stamen Toner')
         stamen_toner.clicked.connect(lambda: self.switch_tiles(stamen_toner.text()))
+        stamen_toner.setToolTip('The <a href="http://maps.stamen.com/#toner/12/37.7706/-122.3782">Stamen Toner</a> map tiles produce a black and white map that both looks striking and would be more suitable for printing than some of the other Folium map tiles.')
         openstreetmap = QRadioButton('OpenStreetMap')
         openstreetmap.clicked.connect(lambda: self.switch_tiles(openstreetmap.text()))
         openstreetmap.setChecked(True)
+        openstreetmap.setToolTip('<a href="https://www.openstreetmap.org/#map=1/19/-99">Folium</a> defaults to using openstreetmap tiles.')
         stamen_terrain = QRadioButton('Stamen Terrain')
         stamen_terrain.clicked.connect(lambda: self.switch_tiles(stamen_terrain.text()))
+        stamen_terrain.setToolTip('''
+                                    <a href="http://maps.stamen.com/#watercolor/12/37.7706/-122.3782">Stamen Terrain</a> produce some cool map tiles which typically work at all zoom levels. 
+                                    These terrain tiles are only available for the USA unfortunately.
+                                  ''')
+        stamen_terrain.setToolTipDuration(0)
 
         lay = QHBoxLayout()
 
