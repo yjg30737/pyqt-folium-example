@@ -221,7 +221,40 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('PyQt & Folium')
 
         self.__m = folium.Map(tiles='openstreetmap')
+        # Add a marker to the map
+        folium.Marker([34.052235, -118.243683], popup='Los Angeles, CA, USA').add_to(self.__m)
         self.__m.save("map.html")
+        import sqlite3
+
+        # Connect to the database (creates the database if it doesn't exist)
+        conn = sqlite3.connect('markers.db')
+        cursor = conn.cursor()
+
+        # Create the table if it doesn't exist
+        cursor.execute('''
+        CREATE TABLE IF NOT EXISTS markers (
+            id INTEGER PRIMARY KEY,
+            lat REAL NOT NULL,
+            lng REAL NOT NULL
+        );
+        ''')
+
+        # Add the marker's latitude and longitude to the database
+        lat = 34.052235
+        lng = -118.243683
+        cursor.execute('''
+        INSERT INTO markers (lat, lng)
+        VALUES (?, ?);
+        ''', (lat, lng))
+
+        cursor.execute('SELECT * FROM markers')
+        print(cursor.fetchall())
+
+        # Commit the changes to the database
+        conn.commit()
+
+        # Close the connection
+        conn.close()
 
         cur_dir = os.path.dirname(__file__)
         map_filename = os.path.join(cur_dir, 'map.html').replace(os.path.sep, posixpath.sep)
@@ -300,6 +333,7 @@ class MainWindow(QMainWindow):
             folium.TileLayer('Stamen Terrain').add_to(self.__m)
             self.__m.save('map.html')
             self.__view.reload()
+
     def eventFilter(self, source, event):
         if event.type() == QEvent.ToolTip and source.toolTip():
             toolTip = ClickableTooltip.showText(
