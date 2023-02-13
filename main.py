@@ -227,26 +227,56 @@ class MainWindow(QMainWindow):
 
         self.__m = folium.Map(tiles='openstreetmap')
 
-        self.__m.add_child(folium.ClickForMarker())
+        self.__m.add_child(folium.ClickForMarker(
+            '''
+            <b>Latitude:</b> ${lat}<br /><b>Longitude:</b> ${lng} <br/>
+            <s>Name of the location - later</s>
+            '''
+        ))
 
-        lat_formatter = "function(num) {return `Latitude: ${L.Util.formatNum(num, 3)}º`;};"
-        lng_formatter = "function(num) {return `Longitude: ${L.Util.formatNum(num, 3)}º`;};"
+        lat_formatter = "function(num) {return `<b>Latitude</b>: ${L.Util.formatNum(num, 3)}º`;};"
+        lng_formatter = "function(num) {return `<b>Longitude</b>: ${L.Util.formatNum(num, 3)}º`;};"
 
         MousePosition(
             position="topright",
-            separator=" | ",
+            separator="<br />",
             empty_string="",
-            lng_first=True,
+            lng_first=False,
             num_digits=20,
-            prefix="Coordinate received by MousePosition plugin:",
+            # show the browser when clicked the coordinate
+            prefix="Coordinate received by <a href=\"https://github.com/python-visualization/folium/blob/main/examples/plugin-MousePosition.ipynb\">MousePosition plugin</a>: <br />",
             lat_formatter=lat_formatter,
             lng_formatter=lng_formatter,
         ).add_to(self.__m)
 
+        # Modify Marker template to include the onClick event
+        click_template = """
+        {% macro script(this, kwargs) %}
+            let {{ this.get_name() }} = L.marker(
+                {{ this.location|tojson }},
+                {{ this.options|tojson }}
+            ).addTo({{ this._parent.get_name() }}).on('click', onClick);
+        {% endmacro %}"""
+
+        # Change template to custom template
+        Marker._template = Template(click_template)
+
+        # Create the onClick listener function as a branca element and add to the map html
+        click_js = """
+        function onClick(e) {
+            let point = e.latlng;
+        }
+        """
+
+        e = folium.Element(click_js)
+        html = self.__m.get_root()
+        html.script.get_root().render()
+        html.script._children[e.get_name()] = e
+
         # Add a marker to the map
         folium.Marker([34.052235, -118.243683], popup='Los Angeles, CA, USA').add_to(self.__m)
-        self.__m.save("map.html")
 
+        self.__m.save("map.html")
 
         # Connect to the database (creates the database if it doesn't exist)
         conn = sqlite3.connect('markers.db')
@@ -330,8 +360,6 @@ class MainWindow(QMainWindow):
         # self.__view.page().fullScreenRequested.connect(lambda request: request.accept())
         # doesn't work either
 
-    def get_coordinates(self, click_event):
-        print("Latitude: {}, Longitude: {}".format(click_event.latitude, click_event.longitude))
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_F11:
             self.showFullScreen()
