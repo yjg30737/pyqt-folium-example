@@ -4,6 +4,7 @@ import webbrowser
 import sqlite3
 import folium
 from folium import Marker
+from folium.plugins import MousePosition
 from jinja2 import Template
 
 from PyQt5.QtCore import QUrl, Qt, QTimer, QRect, QPoint, QEvent
@@ -225,33 +226,25 @@ class MainWindow(QMainWindow):
 
         self.__m = folium.Map(tiles='openstreetmap')
 
-        # https://stackoverflow.com/questions/74707544/add-a-clickevent-function-to-multiple-folium-markers-with-python
-        # Modify Marker template to include the onClick event
-        click_template = """{% macro script(this, kwargs) %}
-            let {{ this.get_name() }} = L.marker(
-                {{ this.location|tojson }},
-                {{ this.options|tojson }}
-            ).addTo({{ this._parent.get_name() }}).on('click', onClick);
-        {% endmacro %}"""
-
-        # Change template to custom template
-        Marker._template = Template(click_template)
-
-        # Create the onClick listener function as a branca element and add to the map html
-        click_js = """function onClick(e) {
-                         let point = e.latlng;
-                         // execute what i want
-                         }"""
-
-        e = folium.Element(click_js)
-        html = self.__m.get_root()
-        html.script.get_root().render()
-        html.script._children[e.get_name()] = e
-
         self.__m.add_child(folium.ClickForMarker())
+
+        formatter = "function(num) {return L.Util.formatNum(num, 3) + ' º ';};"
+
+        MousePosition(
+            position="topright",
+            separator=" | ",
+            empty_string="NaN",
+            lng_first=True,
+            num_digits=20,
+            prefix="Coordinates:",
+            lat_formatter=formatter,
+            lng_formatter=formatter,
+        ).add_to(self.__m)
+
         # Add a marker to the map
         folium.Marker([34.052235, -118.243683], popup='Los Angeles, CA, USA').add_to(self.__m)
         self.__m.save("map.html")
+
 
         # Connect to the database (creates the database if it doesn't exist)
         conn = sqlite3.connect('markers.db')
