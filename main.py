@@ -3,6 +3,7 @@ import webbrowser
 
 import sqlite3
 import folium
+import requests
 from folium import Marker
 from folium.plugins import MousePosition
 from jinja2 import Template
@@ -228,17 +229,18 @@ class MainWindow(QMainWindow):
 
         self.__m.add_child(folium.ClickForMarker())
 
-        formatter = "function(num) {return L.Util.formatNum(num, 3) + ' º ';};"
+        lat_formatter = "function(num) {return `Latitude: ${L.Util.formatNum(num, 3)}º`;};"
+        lng_formatter = "function(num) {return `Longitude: ${L.Util.formatNum(num, 3)}º`;};"
 
         MousePosition(
             position="topright",
             separator=" | ",
-            empty_string="NaN",
+            empty_string="",
             lng_first=True,
             num_digits=20,
-            prefix="Coordinates:",
-            lat_formatter=formatter,
-            lng_formatter=formatter,
+            prefix="Coordinate received by MousePosition plugin:",
+            lat_formatter=lat_formatter,
+            lng_formatter=lng_formatter,
         ).add_to(self.__m)
 
         # Add a marker to the map
