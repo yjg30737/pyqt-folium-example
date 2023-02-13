@@ -3,16 +3,15 @@ import webbrowser
 
 import sqlite3
 import folium
-import requests
 from folium import Marker
 from folium.plugins import MousePosition
 from jinja2 import Template
 
 from PyQt5.QtCore import QUrl, Qt, QTimer, QRect, QPoint, QEvent
 from PyQt5.QtGui import QPalette, QCursor, QRegion, QPainter
-from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
-from PyQt5.QtWidgets import QApplication, QMainWindow, QRadioButton, QWidget, QHBoxLayout, QVBoxLayout, QMenu, QMenuBar, \
-    QAction, QSizePolicy, QStyle, QStyleOption, QStyleHintReturnMask, QLabel
+from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWidgets import QApplication, QMainWindow, QRadioButton, QWidget, QHBoxLayout, QVBoxLayout, QMenu, \
+    QSizePolicy, QStyle, QStyleOption, QStyleHintReturnMask, QLabel
 
 
 # https://stackoverflow.com/questions/59902049/pyqt5-tooltip-with-clickable-hyperlink
