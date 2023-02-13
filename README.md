@@ -4,6 +4,7 @@ Showing folium(based on leaflet.js) map with PyQt desktop app
 ## Requirements
 * folium
 * QtWebEngineView
+* jinja2
 
 ## How to Use
 1. git clone ~
@@ -14,7 +15,7 @@ Showing folium(based on leaflet.js) map with PyQt desktop app
 
 ## Preview
 
-![image](https://user-images.githubusercontent.com/55078043/215922355-15b6d6ed-8a38-4908-8812-fae528cb2810.png)
+![image](https://user-images.githubusercontent.com/55078043/218347247-bd0ce881-e07d-46f7-8469-95eb702103b2.png)
 
 This is very basic one. Zoom in and out and you can see the country's name and region or anything like that
 
