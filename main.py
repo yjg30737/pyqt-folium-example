@@ -1,5 +1,7 @@
 import os, posixpath
+import random
 import webbrowser
+import requests
 
 import sqlite3
 import folium
@@ -226,13 +228,44 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('PyQt & Folium')
 
         self.__m = folium.Map(tiles='openstreetmap')
+        # '''
+        # var url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
+        #                         let locationName;
+        #                         await fetch(url)
+        #                         .then(response => response.json())
+        #                         .then(data => {
+        #                           // Get the location name from the API response
+        #                           locationName = data.display_name;
+        #                           console.log(locationName); // Do something with the location name
+        #                         })
+        #                         .catch(error => console.error(error));
+        # '''
+        click_template = """
+                {% macro script(this, kwargs) %}
+                    async function newMarker(e){
+                        var new_mark = L.marker().setLatLng(e.latlng).addTo({{this._parent.get_name()}});
+                        new_mark.dragging.enable();
+                        new_mark.on('dblclick', function(e){ {{this._parent.get_name()}}.removeLayer(e.target)})
+                        var lat = e.latlng.lat.toFixed(4),
+                           lng = e.latlng.lng.toFixed(4);
+                        
+                        new_mark.bindPopup({{ this.popup }});
+                        };
+                    {{this._parent.get_name()}}.on('click', newMarker);
+                {% endmacro %}"""
 
-        self.__m.add_child(folium.ClickForMarker(
+        marker = folium.ClickForMarker(
             '''
             <b>Latitude:</b> ${lat}<br /><b>Longitude:</b> ${lng} <br/>
-            <s>Name of the location - later</s>
+            <s>Name of the location - ${locationName}</s>
             '''
-        ))
+        )
+
+        marker._name = 'CustomElement'
+
+        marker._template = Template(click_template)
+
+        self.__m.add_child(marker)
 
         lat_formatter = "function(num) {return `<b>Latitude</b>: ${L.Util.formatNum(num, 3)}º`;};"
         lng_formatter = "function(num) {return `<b>Longitude</b>: ${L.Util.formatNum(num, 3)}º`;};"
@@ -275,6 +308,8 @@ class MainWindow(QMainWindow):
 
         # Add a marker to the map
         folium.Marker([34.052235, -118.243683], popup='Los Angeles, CA, USA').add_to(self.__m)
+
+        self.__m.save('map.html')
 
         # Connect to the database (creates the database if it doesn't exist)
         conn = sqlite3.connect('markers.db')
