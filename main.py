@@ -248,7 +248,6 @@ class MainWindow(QMainWindow):
                         new_mark.on('dblclick', function(e){ {{this._parent.get_name()}}.removeLayer(e.target)})
                         var lat = e.latlng.lat.toFixed(4),
                            lng = e.latlng.lng.toFixed(4);
-                        
                         new_mark.bindPopup({{ this.popup }});
                         };
                     {{this._parent.get_name()}}.on('click', newMarker);
@@ -257,7 +256,7 @@ class MainWindow(QMainWindow):
         marker = folium.ClickForMarker(
             '''
             <b>Latitude:</b> ${lat}<br /><b>Longitude:</b> ${lng} <br/>
-            <s>Name of the location - ${locationName}</s>
+            <s>Name of the location - Coming soon (hopefully)</s>
             '''
         )
 
