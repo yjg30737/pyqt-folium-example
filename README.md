@@ -29,6 +29,10 @@ main.html will be generated for showing the folium map. main.html contains foliu
 
 You can just remove it if you want. If you run main.py script it will be generated again anyways
 
+## TODO
+* Connect one's route to the other
+* Get the location's name with tooltip
+
 ## See Also
 * <a href="https://github.com/yjg30737/pyqt-googlemap-example">PyQt Google Map Example</a>
 * <a href="https://github.com/yjg30737/pyqt-plotly-example.git">PyQt Plotly Example</a>
