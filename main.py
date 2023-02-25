@@ -11,7 +11,7 @@ from PyQt5.QtCore import QUrl, Qt, QTimer, QRect, QPoint, QEvent
 from PyQt5.QtGui import QPalette, QCursor, QRegion, QPainter
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QApplication, QMainWindow, QRadioButton, QWidget, QHBoxLayout, QVBoxLayout, QMenu, \
-    QSizePolicy, QStyle, QStyleOption, QStyleHintReturnMask, QLabel
+    QSizePolicy, QStyle, QStyleOption, QStyleHintReturnMask, QLabel, QPushButton
 
 
 # https://stackoverflow.com/questions/59902049/pyqt5-tooltip-with-clickable-hyperlink
@@ -216,6 +216,7 @@ class ClickableTooltip(QLabel):
 
         return toolTip
 
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -274,8 +275,6 @@ class MainWindow(QMainWindow):
 
         # Add a marker to the map
         folium.Marker([34.052235, -118.243683], popup='Los Angeles, CA, USA').add_to(self.__m)
-
-        self.__m.save("map.html")
 
         # Connect to the database (creates the database if it doesn't exist)
         conn = sqlite3.connect('markers.db')
@@ -341,13 +340,31 @@ class MainWindow(QMainWindow):
         lay.addWidget(stamen_terrain)
         lay.setContentsMargins(0, 0, 0, 0)
 
-        navWidget = QWidget()
-        navWidget.setLayout(lay)
-        navWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+        typeWidget = QWidget()
+        typeWidget.setLayout(lay)
+        typeWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
 
         lay = QVBoxLayout()
-        lay.addWidget(navWidget)
+        lay.addWidget(typeWidget)
         lay.addWidget(self.__view)
+
+        leftWidget = QWidget()
+        leftWidget.setLayout(lay)
+
+        routeBtn = QPushButton('Show the route')
+        routeBtn.clicked.connect(self.__showRoute)
+
+        lay = QVBoxLayout()
+        lay.addWidget(routeBtn)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setContentsMargins(0, 0, 0, 0)
+
+        controlWidget = QWidget()
+        controlWidget.setLayout(lay)
+
+        lay = QHBoxLayout()
+        lay.addWidget(leftWidget)
+        lay.addWidget(controlWidget)
 
         mainWidget = QWidget()
         mainWidget.setLayout(lay)
@@ -384,6 +401,12 @@ class MainWindow(QMainWindow):
             folium.TileLayer('Stamen Terrain').add_to(self.__m)
             self.__m.save('map.html')
             self.__view.reload()
+
+    def __showRoute(self):
+        line = folium.PolyLine(locations=[[57, -70], [47, 73]], color='red')
+        line.add_to(self.__m)
+        self.__m.save("map.html")
+        self.__view.reload()
 
     def eventFilter(self, source, event):
         if event.type() == QEvent.ToolTip and source.toolTip():
