@@ -40,18 +40,9 @@ class MainWindow(QMainWindow):
         #                         })
         #                         .catch(error => console.error(error));
         # '''
-        click_template = """
-                {% macro script(this, kwargs) %}
-                    async function newMarker(e){
-                        var new_mark = L.marker().setLatLng(e.latlng).addTo({{this._parent.get_name()}});
-                        new_mark.dragging.enable();
-                        new_mark.on('dblclick', function(e){ {{this._parent.get_name()}}.removeLayer(e.target)})
-                        var lat = e.latlng.lat.toFixed(4),
-                           lng = e.latlng.lng.toFixed(4);
-                        new_mark.bindPopup({{ this.popup }});
-                        };
-                    {{this._parent.get_name()}}.on('click', newMarker);
-                {% endmacro %}"""
+        click_template = ''
+        with open('click.js', 'r') as f:
+            click_template = f.read()
 
         marker = folium.ClickForMarker(
             '''
@@ -61,9 +52,7 @@ class MainWindow(QMainWindow):
         )
 
         marker._name = 'CustomElement'
-
         marker._template = Template(click_template)
-
         self.__m.add_child(marker)
 
         lat_formatter = "function(num) {return `<b>Latitude</b>: ${L.Util.formatNum(num, 3)}º`;};"
@@ -80,38 +69,6 @@ class MainWindow(QMainWindow):
             lat_formatter=lat_formatter,
             lng_formatter=lng_formatter,
         ).add_to(self.__m)
-
-        # Modify Marker template to include the onClick event
-        click_template = """
-        {% macro script(this, kwargs) %}
-            let {{ this.get_name() }} = L.marker(
-                {{ this.location|tojson }},
-                {{ this.options|tojson }}
-            ).addTo({{ this._parent.get_name() }}).on('click', onClick);
-        {% endmacro %}"""
-
-        # Change template to custom template
-        Marker._template = Template(click_template)
-
-        # Create the onClick listener function as a branca element and add to the map html
-        click_js = """
-        function onClick(e) {
-            let point = e.latlng;
-        }
-        """
-
-        # e = folium.Element(click_js)
-        # html = self.__m.get_root()
-        # html.script.get_root().render()
-        # html.script._children[e.get_name()] = e
-
-        e = folium.Element(click_js)
-        html = self.__m.get_root()
-        html.script.get_root().render()
-        html.script._children[e.get_name()] = e
-
-        # Add a marker to the map
-        folium.Marker([34.052235, -118.243683], popup='Los Angeles, CA, USA').add_to(self.__m)
 
         self.__m.save('map.html')
 
@@ -151,7 +108,6 @@ class MainWindow(QMainWindow):
         self.__view = QWebEngineView()
         self.__view.selectionChanged.connect(self.__selectionChanged)
         self.__view.load(QUrl.fromLocalFile(map_filename))
-
 
         # Create the radio buttons for each tile provider
         # tooltip description from https://deparkes.co.uk/2016/06/10/folium-map-tiles/
