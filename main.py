@@ -13,14 +13,10 @@ from PyQt5.QtCore import QUrl, Qt, QTimer, QRect, QPoint, QEvent
 from PyQt5.QtGui import QPalette, QCursor, QRegion, QPainter
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QApplication, QMainWindow, QRadioButton, QWidget, QHBoxLayout, QVBoxLayout, QMenu, \
-    QSizePolicy, QStyle, QStyleOption, QStyleHintReturnMask, QLabel, QPushButton, QFrame, QLineEdit, QTableWidget
+    QSizePolicy, QStyle, QStyleOption, QStyleHintReturnMask, QLabel, QPushButton, QFrame, QLineEdit, QTableWidget, \
+    QGroupBox
 
 from clickableTooltip import ClickableTooltip
-
-
-# https://stackoverflow.com/questions/59902049/pyqt5-tooltip-with-clickable-hyperlink
-# musicamante's answer
-
 
 
 class MainWindow(QMainWindow):
@@ -153,7 +149,9 @@ class MainWindow(QMainWindow):
         map_filename = os.path.join(cur_dir, 'map.html').replace(os.path.sep, posixpath.sep)
 
         self.__view = QWebEngineView()
+        self.__view.selectionChanged.connect(self.__selectionChanged)
         self.__view.load(QUrl.fromLocalFile(map_filename))
+
 
         # Create the radio buttons for each tile provider
         # tooltip description from https://deparkes.co.uk/2016/06/10/folium-map-tiles/
@@ -181,9 +179,9 @@ class MainWindow(QMainWindow):
         lay.addWidget(stamen_toner)
         lay.addWidget(openstreetmap)
         lay.addWidget(stamen_terrain)
-        lay.setContentsMargins(0, 0, 0, 0)
 
-        typeWidget = QWidget()
+        typeWidget = QGroupBox()
+        typeWidget.setTitle('Type of Map')
         typeWidget.setLayout(lay)
         typeWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
 
@@ -194,8 +192,17 @@ class MainWindow(QMainWindow):
         leftWidget = QWidget()
         leftWidget.setLayout(lay)
 
-        routeBtn = QPushButton('Show the route')
-        routeBtn.clicked.connect(self.__showRoute)
+        singleMarkerRadBtn = QRadioButton('Single')
+        multiMarkerRadBtn = QRadioButton('Multiple')
+        multiMarkerRadBtn.setChecked(True)
+
+        lay = QVBoxLayout()
+        lay.addWidget(singleMarkerRadBtn)
+        lay.addWidget(multiMarkerRadBtn)
+
+        markerOptionGrpBox = QGroupBox()
+        markerOptionGrpBox.setTitle('Marker Option')
+        markerOptionGrpBox.setLayout(lay)
 
         sep = QFrame()
         sep.setFrameShape(QFrame.HLine)
@@ -221,7 +228,7 @@ class MainWindow(QMainWindow):
         tableWidget = QTableWidget()
 
         lay = QVBoxLayout()
-        lay.addWidget(routeBtn)
+        lay.addWidget(markerOptionGrpBox)
         lay.addWidget(sep)
         lay.addWidget(QLabel('Name of Route'))
         lay.addWidget(routeLineEdit)
@@ -257,6 +264,9 @@ class MainWindow(QMainWindow):
 
     # TODO maintain the coordinate after switching
     # TODO script keep adding, it makes the file bigger and bigger, so how about replacing instead of adding?
+
+    def __selectionChanged(self):
+        print('__selectionChanged')
 
     # Create a function to switch the folium tiles when the radio buttons are clicked
     def switch_tiles(self, text):
