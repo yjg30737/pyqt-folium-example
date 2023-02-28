@@ -1,5 +1,6 @@
 import os, posixpath
 import random
+import threading
 import webbrowser
 import requests
 
@@ -17,6 +18,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QRadioButton, QWidget, QH
     QGroupBox
 
 from clickableTooltip import ClickableTooltip
+from server import flask_thread
 
 
 class MainWindow(QMainWindow):
@@ -257,11 +259,13 @@ class MainWindow(QMainWindow):
         webbrowser.open(url)
 
     def __addMark(self):
-        print()
+        print('addMark - coming soon')
 
 
 if __name__ == "__main__":
     import sys
+
+    threading.Thread(target=flask_thread).start()
 
     app = QApplication(sys.argv)
     w = MainWindow()
