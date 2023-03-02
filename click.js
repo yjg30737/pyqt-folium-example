@@ -3,7 +3,7 @@
         let lat = e.latlng.lat.toFixed(4),
         lng = e.latlng.lng.toFixed(4);
         let data = {lat: lat, lng: lng};
-        let response = await fetch('/add_marker', {
+        let response = await fetch('http://127.0.0.1:5000/add_marker', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(data)

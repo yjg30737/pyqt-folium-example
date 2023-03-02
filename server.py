@@ -26,8 +26,8 @@ def add_marker():
         raise Exception
 
 
-# def flask_thread():
-#     app.run()
+def flask_thread():
+    app.run()
 
 # for test by Chrome DevTools
 # app.run()
