@@ -1,5 +1,5 @@
 # pyqt-folium-example
-Showing folium(based on leaflet.js) map with PyQt desktop app
+Showing folium(based on leaflet.js) map with PyQt desktop(+web) app
 
 This is not the static map viewer, this is basic client-server side web app.
 
@@ -9,7 +9,7 @@ Server side is using the 5000 port. Therefore, you should check whether the port
 * folium
 * QtWebEngineView
 * jinja2 - to use javascript in the Python source
-* flask - to save the information in DB
+* flask (Python web framework, it needs to build the web app) - to save the information in DB
 * flask_cors - to fix the CORS error
 
 ## How to Use
@@ -45,10 +45,7 @@ You can switch between each tile by clicking on each radio button.
 Each time you click one of them, the Folium HTML file is saved and the QWebEngineView is reloaded.
 
 ## Note
-
 main.html will be generated for showing the folium map. main.html contains folium related scripts.
-
-You can just remove it if you want. If you run main.py script it will be generated again anyways
 
 ## TODO
 * Connect one's route to the other
