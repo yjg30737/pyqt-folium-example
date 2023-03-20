@@ -48,7 +48,10 @@ Each time you click one of them, the Folium HTML file is saved and the QWebEngin
 main.html will be generated for showing the folium map. main.html contains folium related scripts.
 
 ## TODO
+* Toggle the sidebar
 * Connect one's route to the other
+* Stop the server when the web app is closed
+* Add feature to export it as DB
 * Get the location's name with tooltip
 
 ## See Also
