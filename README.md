@@ -4,9 +4,9 @@ Showing folium(based on leaflet.js) map with PyQt desktop app
 ## Requirements
 * folium
 * QtWebEngineView
-* jinja2
-* flask
-* flask_cors
+* jinja2 - to use javascript in the Python source
+* flask - to save the information in DB
+* flask_cors - to fix the CORS error
 
 ## How to Use
 1. git clone ~
