@@ -3,8 +3,6 @@ Showing folium(based on leaflet.js) map with PyQt desktop app
 
 This is not the static map viewer, this is basic client-server side web app.
 
-I will make a diagram to illustrate this well.
-
 ## Requirements
 * folium
 * QtWebEngineView
@@ -18,6 +16,21 @@ I will make a diagram to illustrate this well.
 3. python -m pip install PyQtWebEngine
 4. python -m pip install folium
 5. python main.py
+
+## How to check the error
+This script doesn't support error log on its own(it is very hard), so we need to use the browser like Chrome, Edge, Firefox.
+
+1. Go to the root directory
+2. Open the script.py file and uncomment the code below
+```python
+# for test by browser
+# app.run()
+```
+3. python server.py
+4. open map.html
+5. Chrome, for example, you can see the log to figure it out it works well or not. It doesn't work for some reasons, you can fix the error on your own.
+
+![image](https://user-images.githubusercontent.com/55078043/226232439-00c79606-fa9a-4805-b99f-16455e93fa38.png)
 
 ## Preview
 
