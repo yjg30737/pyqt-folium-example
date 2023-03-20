@@ -3,6 +3,8 @@ Showing folium(based on leaflet.js) map with PyQt desktop app
 
 This is not the static map viewer, this is basic client-server side web app.
 
+Server side is using the 5000 port. Therefore, you should check whether the port 5000 is already in use or not.
+
 ## Requirements
 * folium
 * QtWebEngineView
@@ -53,5 +55,6 @@ You can just remove it if you want. If you run main.py script it will be generat
 * Get the location's name with tooltip
 
 ## See Also
+Note: examples on the list are the static map viewer. It doesn't use the server-side at all.
 * <a href="https://github.com/yjg30737/pyqt-googlemap-example">PyQt Google Map Example</a>
 * <a href="https://github.com/yjg30737/pyqt-plotly-example.git">PyQt Plotly Example</a>
