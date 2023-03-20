@@ -1,6 +1,10 @@
 # pyqt-folium-example
 Showing folium(based on leaflet.js) map with PyQt desktop app
 
+This is not the static map viewer, this is basic client-server side web app.
+
+I will make a diagram to illustrate this well.
+
 ## Requirements
 * folium
 * QtWebEngineView
